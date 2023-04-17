@@ -1,0 +1,784 @@
+definitions:
+  models.CommentCreateInputSwagger:
+    properties:
+      message:
+        type: string
+    type: object
+  models.CommentCreateOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.CommentGetOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.UserRegisterOutput'
+    type: object
+  models.CommentUpdateInputSwagger:
+    properties:
+      message:
+        type: string
+    type: object
+  models.CommentUpdateOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.DeleteResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  models.PhotoCreateOutput:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.PhotoGetOutput:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.UserRegisterOutput'
+    type: object
+  models.PhotoUpdateOutput:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.SocialMediaCreateInputSwagger:
+    properties:
+      name:
+        type: string
+      social_media_url:
+        type: string
+    type: object
+  models.SocialMediaCreateOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.SocialMediaGetOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.UserRegisterOutput'
+    type: object
+  models.SocialMediaUpdateInputSwagger:
+    properties:
+      name:
+        type: string
+      social_media_url:
+        type: string
+    type: object
+  models.SocialMediaUpdateOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.UserLoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.UserLoginOutput:
+    properties:
+      token:
+        type: string
+    type: object
+  models.UserRegisterInput:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserRegisterOutput:
+    properties:
+      age:
+        type: integer
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is service for MyGram.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MyGram API
+  version: "1.0"
+paths:
+  /api/v1/photos:
+    get:
+      description: Get all photos
+      parameters:
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PhotoGetOutput'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all photos
+      tags:
+      - photos
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create photos
+      parameters:
+      - in: formData
+        name: caption
+        type: string
+      - in: formData
+        name: title
+        type: string
+      - description: upload photo
+        in: formData
+        name: photo
+        required: true
+        type: file
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.PhotoCreateOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create photos
+      tags:
+      - photos
+  /api/v1/photos/{photoId}:
+    delete:
+      description: Delete photo
+      parameters:
+      - description: delete photo by id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeleteResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete photo
+      tags:
+      - photos
+    get:
+      description: Get one photo by id
+      parameters:
+      - description: get photo by id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PhotoGetOutput'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get one photo by id
+      tags:
+      - photos
+    put:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Update photo
+      parameters:
+      - description: update photo by id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - in: formData
+        name: caption
+        type: string
+      - in: formData
+        name: title
+        type: string
+      - description: upload photo
+        in: formData
+        name: photo
+        type: file
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PhotoUpdateOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update photo
+      tags:
+      - photos
+  /api/v1/photos/{photoId}/comments:
+    get:
+      description: Get all comments associated with the photo id
+      parameters:
+      - description: get comment associated with the photo id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CommentGetOutput'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all comments associated with the photo id
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Create comment
+      parameters:
+      - description: create comment associated with the photo id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: create comment
+        in: body
+        name: models.CommentCreateInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentCreateInputSwagger'
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CommentCreateOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create comment
+      tags:
+      - comments
+  /api/v1/photos/{photoId}/comments/{commentId}:
+    delete:
+      description: Delete comment
+      parameters:
+      - description: delete comment associated with the photo id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: delete comment by id
+        in: path
+        name: commentId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeleteResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete comment
+      tags:
+      - comments
+    get:
+      description: Get one comment by id
+      parameters:
+      - description: get comment associated with the photo id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: get comment by id
+        in: path
+        name: commentId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentGetOutput'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get one comment by id
+      tags:
+      - comments
+    put:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Update comment
+      parameters:
+      - description: update comment associated with the photo id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      - description: update comment by id
+        in: path
+        name: commentId
+        required: true
+        type: string
+      - description: update comment
+        in: body
+        name: models.CommentUpdateInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentUpdateInputSwagger'
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentUpdateOutput'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update comment
+      tags:
+      - comments
+  /api/v1/social-medias:
+    get:
+      description: Get all social media
+      parameters:
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SocialMediaGetOutput'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all social media
+      tags:
+      - socialMedias
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Create social media
+      parameters:
+      - description: create social media
+        in: body
+        name: models.SocialMediaCreateInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.SocialMediaCreateInputSwagger'
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SocialMediaCreateOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create social media
+      tags:
+      - socialMedias
+  /api/v1/social-medias/{socialMediaId}:
+    delete:
+      description: Delete social media
+      parameters:
+      - description: delete social media by id
+        in: path
+        name: socialMediaId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeleteResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete social media
+      tags:
+      - socialMedias
+    get:
+      description: Get one social media by id
+      parameters:
+      - description: get social media by id
+        in: path
+        name: socialMediaId
+        required: true
+        type: string
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SocialMediaGetOutput'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get one social media by id
+      tags:
+      - socialMedias
+    put:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Update social media
+      parameters:
+      - description: update social media by id
+        in: path
+        name: socialMediaId
+        required: true
+        type: string
+      - description: update social media
+        in: body
+        name: models.SocialMediaUpdateInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.SocialMediaUpdateInputSwagger'
+      - description: 'format: Bearer token-here'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SocialMediaUpdateOutput'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update social media
+      tags:
+      - socialMedias
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: User login
+      parameters:
+      - description: login user
+        in: body
+        name: models.UserLoginInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserLoginInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserLoginOutput'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: User login
+      tags:
+      - users
+  /api/v1/users/register:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Register new user
+      parameters:
+      - description: register user
+        in: body
+        name: models.UserRegisterInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegisterInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserRegisterOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Register new user
+      tags:
+      - users
+swagger: "2.0"

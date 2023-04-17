@@ -11,7 +11,6 @@ import (
 )
 
 func init() {
-	// add APP_ENV="production" in railway variable
 	if os.Getenv("APP_ENV") != "production" {
 		err := godotenv.Load()
 		if err != nil {
@@ -24,5 +23,5 @@ func main() {
 	database.StartDB()
 	helpers.InitCloudinary()
 	r := routers.StartApp()
-	r.Run() // use default port
+	r.Run()
 }
